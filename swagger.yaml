@@ -1,0 +1,131 @@
+swagger: '2.0'
+info:
+  title: Streamers API
+  version: "0.1"
+  description: Simple REST API
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /streamers:
+    post:
+      tags: [Streamers]
+      operationId: controllers.streamers.create_streamer
+      summary: Create a streamer
+      parameters:
+        - name: streamer
+          in: body
+          schema:
+            $ref: '#/definitions/Streamer'
+      responses:
+        201:
+          description: New streamer created
+        400:
+          description: Bad request
+    get:
+      tags: [Streamers]
+      operationId: controllers.streamers.get_streamers
+      summary: Get list of streamers
+      responses:
+        200:
+          description: Return streamer
+          schema:
+            $ref: '#/definitions/Streamer'
+        404:
+          description: Streamer does not exist
+  /streamers/{username}:
+    get:
+      tags: [Streamers]
+      operationId: controllers.streamers.get_streamer
+      summary: Get a single streamer by username
+      parameters:
+        - $ref: '#/parameters/username'
+      responses:
+        200:
+          description: Return streamer
+          schema:
+            $ref: '#/definitions/Streamer'
+        404:
+          description: Streamer does not exist
+    delete:
+      tags: [Streamers]
+      operationId: controllers.streamers.delete_streamer
+      summary: Remove a streamer
+      parameters:
+        - $ref: '#/parameters/username'
+      responses:
+        204:
+          description: Streamer was deleted
+        404:
+          description: Streamer does not exist
+  /subscriptions/callback:
+    post:
+      tags: [Subscriptions]
+      operationId: controllers.streams.post_callback
+      summary: receive Callback
+      parameters:
+        - name: callback_body
+          in: body
+          schema:
+            $ref: '#/definitions/CallbackBody'
+      responses:
+        201:
+          description: Callback Received
+        400:
+          description: Bad request
+
+
+parameters:
+  username:
+    name: username
+    description: Streamer's Unique identifier
+    in: path
+    type: string
+    required: true
+    pattern: "^[a-zA-Z0-9-]+$"
+
+
+definitions:
+  Streamer:
+    type: object
+    required:
+      - platform
+      - username
+      - streaming_url
+      - profile_image
+    properties:
+      id:
+        type: string
+        description: Unique identifier
+        example: "123"
+      platform:
+        type: string
+        description: Streaming platform
+        example: "Twitch"
+        minLength: 1
+        maxLength: 100
+      username:
+        type: string
+        description: streamer's name
+        example: "zold90"
+        minLength: 1
+      streaming_url:
+        type: string
+        description: Url
+        example: "twitch.tv/dummy_man"
+        minLength: 1
+        maxLength: 100
+      profile_image:
+        type: string
+        description: profile image url
+        minLength: 1
+        maxLength: 100
+  CallbackBody:
+    type: object
+    properties:
+      challenge:
+        type: string
+        description: challange
+        example: "pooauuyyeye"
+        minLength: 1
