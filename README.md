@@ -7,8 +7,6 @@ A simple streamers rest API
 ```
 python3 -m pip install pipenv --user
 pipenv install --dev
-pipenv shell
-app.py
 ```
 ### Setup twitch credentials
 ```
